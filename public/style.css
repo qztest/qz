@@ -1,0 +1,58 @@
+.headline {
+  text-align: center;
+  font-size: 20px;
+  line-height: 24px;
+  padding: 20px;
+  margin: 0px;
+  font-family: 'Cormorant', serif;
+}
+
+.text-container {
+  width: 320px;
+}
+
+.dark {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.light {
+  background-color: #F9F9F9;
+  color: #000000;
+}
+
+.body {
+  font-size: 18px;
+  line-height: 27px;
+  padding: 20px;
+  font-family: 'Rubik', sans-serif;
+}
+
+p {
+  margin-top: 0px;
+}
+
+/* referenced https://stackoverflow.com/questions/22271686/how-to-add-a-gradient-filter-in-the-image-in-css
+*/
+.featureImage {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.featureImage img {
+  width: 320px;
+  height: 180px;
+  display: block;
+}
+
+.featureImage:after {
+  opacity: 0.5;
+  position: absolute;
+  content:"";
+  height:100%;
+  width:100%;
+  top:0;
+  left:0;
+  background: linear-gradient(to top, #F9F9F9,#808080,#000000)
+}
