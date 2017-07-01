@@ -34,25 +34,25 @@ p {
 
 /* referenced https://stackoverflow.com/questions/22271686/how-to-add-a-gradient-filter-in-the-image-in-css
 */
-.featureImage {
+.feature-image {
   position: relative;
   display: inline-block;
   vertical-align: top;
 }
 
-.featureImage img {
+.feature-image img {
   width: 320px;
   height: 180px;
   display: block;
 }
 
-.featureImage:after {
+.feature-image:after {
   opacity: 0.5;
   position: absolute;
-  content:"";
-  height:100%;
-  width:100%;
-  top:0;
-  left:0;
-  background: linear-gradient(to top, #F9F9F9,#808080,#000000)
+  content: '';
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: linear-gradient(to top, #F9F9F9, #808080, #000000)
 }

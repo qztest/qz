@@ -10448,9 +10448,9 @@ var _axios = __webpack_require__(91);
 
 var _axios2 = _interopRequireDefault(_axios);
 
-var _Article = __webpack_require__(109);
+var _Articles = __webpack_require__(109);
 
-var _Article2 = _interopRequireDefault(_Article);
+var _Articles2 = _interopRequireDefault(_Articles);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -10469,26 +10469,57 @@ var App = function (_Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
     _this.state = {
-      articles: []
+      allArticles: [],
+      currentArticleIdx: 0,
+      currentArticleTop: 0
     };
+    _this.loadArticles = _this.loadArticles.bind(_this);
+    _this.onScroll = _this.onScroll.bind(_this);
     return _this;
   }
 
   _createClass(App, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
+      this.loadArticles();
+      window.addEventListener('scroll', this.onScroll);
+    }
+  }, {
+    key: 'loadArticles',
+    value: function loadArticles() {
       var _this2 = this;
 
-      _axios2.default.get('api/articles').then(function (articles) {
-        return _this2.setState({ articles: articles.data.items });
+      _axios2.default.get('api/articles').then(function (res) {
+        return _this2.setState({ allArticles: res.data.items });
       }).catch(function (err) {
         return console.error(err);
       });
     }
   }, {
+    key: 'onScroll',
+    value: function onScroll() {
+      var currentArticleHeight = document.getElementById(this.state.currentArticleIdx).scrollHeight,
+          currentArticleBottom = this.state.currentArticleTop + currentArticleHeight,
+          scrollPosition = window.innerHeight + window.pageYOffset,
+          loadNextPosition = this.state.currentArticleTop + currentArticleHeight * 0.98,
+          nextIdx = this.state.currentArticleIdx + 1;
+      // once last article loads, remove event listener
+      if (nextIdx === this.state.allArticles.length) {
+        window.removeEventListener('scroll', this.onScroll);
+      }
+      // once user has scrolled 98% down current article, load next article by incrementing currentArticleIdx in state
+      if (scrollPosition >= loadNextPosition) {
+        this.setState({
+          currentArticleIdx: nextIdx,
+          currentArticleTop: currentArticleBottom
+        });
+      }
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return _react2.default.createElement(_Article2.default, { articles: this.state.articles });
+      var loadedArticles = this.state.allArticles.slice(0, this.state.currentArticleIdx + 1);
+      return _react2.default.createElement(_Articles2.default, { articles: loadedArticles });
     }
   }]);
 
@@ -11359,65 +11390,48 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 var _react = __webpack_require__(33);
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Article = function (_Component) {
-  _inherits(Article, _Component);
-
-  function Article(props) {
-    _classCallCheck(this, Article);
-
-    return _possibleConstructorReturn(this, (Article.__proto__ || Object.getPrototypeOf(Article)).call(this, props));
-  }
-
-  _createClass(Article, [{
-    key: 'render',
-    value: function render() {
-      var articles = this.props.articles;
+var Articles = function Articles(props) {
+  // setting each article's div id to its index in the articles array allows App component to calculate height of current article
+  return _react2.default.createElement(
+    'div',
+    null,
+    props.articles.map(function (article, i) {
       return _react2.default.createElement(
         'div',
-        null,
+        { id: i, key: article.id },
         _react2.default.createElement(
           'div',
           { className: 'text-container' },
           _react2.default.createElement(
             'h1',
             { className: 'headline dark' },
-            articles.length && articles[0].title
+            article.title
           )
         ),
         _react2.default.createElement(
           'div',
-          { className: 'featureImage' },
-          _react2.default.createElement('img', { src: articles.length && articles[0].hero.url, alt: articles.length && articles[0].hero.alt })
+          { className: 'feature-image' },
+          _react2.default.createElement('img', { src: article.hero.url, alt: article.hero.alt })
         ),
         _react2.default.createElement(
           'div',
           { className: 'text-container' },
-          _react2.default.createElement('div', { className: 'body light', dangerouslySetInnerHTML: { __html: articles.length && articles[0].content } })
+          _react2.default.createElement('div', { className: 'body light', dangerouslySetInnerHTML: { __html: article.content } })
         )
       );
-    }
-  }]);
-
-  return Article;
-}(_react.Component);
+    })
+  );
+};
 
 // to avoid using dangerouslySetInnerHTML https://github.com/noraesae/react-render-html
 
-exports.default = Article;
+exports.default = Articles;
 
 /***/ }),
 /* 110 */
