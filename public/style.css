@@ -1,5 +1,4 @@
 .headline {
-  text-align: center;
   font-size: 20px;
   line-height: 24px;
   padding: 20px;
@@ -18,7 +17,6 @@
 
 .light {
   background-color: #F9F9F9;
-  color: #000000;
 }
 
 .body {
@@ -54,5 +52,12 @@ p {
   width: 100%;
   top: 0;
   left: 0;
+}
+
+.feature-image.light-to-dark:after {
+  background: linear-gradient(to bottom, #F9F9F9, #808080, #000000)
+}
+
+.feature-image.dark-to-light:after {
   background: linear-gradient(to top, #F9F9F9, #808080, #000000)
 }

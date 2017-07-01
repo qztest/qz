@@ -11394,10 +11394,22 @@ var _react = __webpack_require__(33);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _Headline = __webpack_require__(211);
+
+var _Headline2 = _interopRequireDefault(_Headline);
+
+var _Image = __webpack_require__(212);
+
+var _Image2 = _interopRequireDefault(_Image);
+
+var _Body = __webpack_require__(213);
+
+var _Body2 = _interopRequireDefault(_Body);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Articles = function Articles(props) {
-  // setting each article's div id to its index in the articles array allows App component to calculate height of current article
+  // setting each article's div id to its index allows App component to calculate height of current article
   return _react2.default.createElement(
     'div',
     null,
@@ -11405,25 +11417,9 @@ var Articles = function Articles(props) {
       return _react2.default.createElement(
         'div',
         { id: i, key: article.id },
-        _react2.default.createElement(
-          'div',
-          { className: 'text-container' },
-          _react2.default.createElement(
-            'h1',
-            { className: 'headline dark' },
-            article.title
-          )
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'feature-image' },
-          _react2.default.createElement('img', { src: article.hero.url, alt: article.hero.alt })
-        ),
-        _react2.default.createElement(
-          'div',
-          { className: 'text-container' },
-          _react2.default.createElement('div', { className: 'body light', dangerouslySetInnerHTML: { __html: article.content } })
-        )
+        _react2.default.createElement(_Headline2.default, { headline: article.title, idx: i }),
+        _react2.default.createElement(_Image2.default, { url: article.hero.url, alt: article.hero.alt, idx: i }),
+        _react2.default.createElement(_Body2.default, { content: article.content, idx: i })
       );
     })
   );
@@ -24071,6 +24067,102 @@ function traverseAllChildren(children, callback, traverseContext) {
 
 module.exports = traverseAllChildren;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 211 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(33);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Headline = function Headline(props) {
+  // if article has even index, use dark color scheme; if odd, use light
+  var colorScheme = props.idx % 2 === 0 ? 'dark' : 'light';
+  var headlineClass = 'headline ' + colorScheme;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'text-container' },
+    _react2.default.createElement(
+      'h2',
+      { className: headlineClass },
+      props.headline.replace(/&#8217;/g, "'")
+    )
+  );
+};
+
+exports.default = Headline;
+
+/***/ }),
+/* 212 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(33);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Image = function Image(props) {
+  var colorScheme = props.idx % 2 === 0 ? 'dark-to-light' : 'light-to-dark';
+  var imageClass = 'feature-image ' + colorScheme;
+
+  return _react2.default.createElement(
+    'div',
+    { className: imageClass },
+    _react2.default.createElement('img', { src: props.url, alt: props.alt })
+  );
+};
+
+exports.default = Image;
+
+/***/ }),
+/* 213 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(33);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Body = function Body(props) {
+  // if article has even index, use light color scheme; if odd, use dark
+  var colorScheme = props.idx % 2 === 0 ? 'light' : 'dark';
+  var bodyClass = 'body ' + colorScheme;
+
+  return _react2.default.createElement(
+    'div',
+    { className: 'text-container' },
+    _react2.default.createElement('div', { className: bodyClass, dangerouslySetInnerHTML: { __html: props.content } })
+  );
+};
+
+exports.default = Body;
 
 /***/ })
 /******/ ]);
