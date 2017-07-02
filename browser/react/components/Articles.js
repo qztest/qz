@@ -19,6 +19,4 @@ const Articles = props => {
   );
 }
 
-// to avoid using dangerouslySetInnerHTML https://github.com/noraesae/react-render-html
-
 export default Articles;

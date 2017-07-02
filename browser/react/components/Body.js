@@ -1,4 +1,5 @@
 import React from 'react';
+import renderHTML from 'react-render-html';
 
 const Body = props => {
   // if article has even index, use light color scheme; if odd, use dark
@@ -7,7 +8,9 @@ const Body = props => {
 
   return (
     <div className='text-container'>
-      <div className={bodyClass} dangerouslySetInnerHTML={{__html: props.content}} />
+      <div className={bodyClass}>
+        {renderHTML(props.content)}
+      </div>
     </div>
   );
 }
