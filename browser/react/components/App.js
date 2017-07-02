@@ -10,7 +10,7 @@ export default class App extends Component {
       allArticles: [],
       currentArticleIdx: 0,
       currentArticleTop: 0
-    }
+    };
     this.loadArticles = this.loadArticles.bind(this);
     this.onScroll = this.onScroll.bind(this);
   }
