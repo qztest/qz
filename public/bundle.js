@@ -22572,7 +22572,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               Initially I was loading the next article once the user had scrolled 98% down the current article. But after thinking about it some more, I decided that while I liked that approach for articles that are all about the same length, it would vary the user experience for articles of significantly different lengths. Loading the next article once the user scrolls within a certain distance of the bottom of the page also makes for less complex code.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               */
 
 var App = function (_Component) {
   _inherits(App, _Component);
@@ -22584,8 +22586,7 @@ var App = function (_Component) {
 
     _this.state = {
       allArticles: [],
-      currentArticleIdx: 0,
-      currentArticleTop: 0
+      currentArticle: 1
     };
     _this.loadArticles = _this.loadArticles.bind(_this);
     _this.onScroll = _this.onScroll.bind(_this);
@@ -22612,27 +22613,22 @@ var App = function (_Component) {
   }, {
     key: 'onScroll',
     value: function onScroll() {
-      var currentArticleHeight = document.getElementById(this.state.currentArticleIdx).scrollHeight,
-          currentArticleBottom = this.state.currentArticleTop + currentArticleHeight,
-          scrollPosition = window.innerHeight + window.pageYOffset,
-          loadNextPosition = this.state.currentArticleTop + currentArticleHeight * 0.98,
-          nextIdx = this.state.currentArticleIdx + 1;
+      var scrollPosition = window.innerHeight + window.pageYOffset,
+          loadNextPosition = document.body.offsetHeight - 50;
       // once last article loads, remove event listener
-      if (nextIdx === this.state.allArticles.length) {
+      if (this.state.currentArticle === this.state.allArticles.length) {
         window.removeEventListener('scroll', this.onScroll);
       }
-      // once user has scrolled 98% down current article, load next article by incrementing currentArticleIdx in state
+      // once user approaches end of current article, load next article by incrementing currentArticle in state
       if (scrollPosition >= loadNextPosition) {
-        this.setState({
-          currentArticleIdx: nextIdx,
-          currentArticleTop: currentArticleBottom
-        });
+        this.setState({ currentArticle: this.state.currentArticle + 1 });
       }
     }
   }, {
     key: 'render',
     value: function render() {
-      var loadedArticles = this.state.allArticles.slice(0, this.state.currentArticleIdx + 1);
+      // load only the articles up to currentArticle
+      var loadedArticles = this.state.allArticles.slice(0, this.state.currentArticle);
       return _react2.default.createElement(_Articles2.default, { articles: loadedArticles });
     }
   }]);
@@ -23523,14 +23519,13 @@ var _Body2 = _interopRequireDefault(_Body);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Articles = function Articles(props) {
-  // setting each article's div id to its index allows App component to calculate height of current article
   return _react2.default.createElement(
     'div',
     null,
     props.articles.map(function (article, i) {
       return _react2.default.createElement(
         'div',
-        { id: i, key: article.id },
+        { key: article.id },
         _react2.default.createElement(_Headline2.default, { headline: article.title, idx: i }),
         _react2.default.createElement(_Image2.default, { url: article.hero.url, alt: article.hero.alt, idx: i }),
         _react2.default.createElement(_Body2.default, { content: article.content, idx: i })

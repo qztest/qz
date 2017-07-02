@@ -30,6 +30,10 @@ p {
   margin-top: 0px;
 }
 
+body {
+  margin: 0px;
+}
+
 /* referenced https://stackoverflow.com/questions/22271686/how-to-add-a-gradient-filter-in-the-image-in-css
 */
 .feature-image {
